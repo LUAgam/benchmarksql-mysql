@@ -7,6 +7,10 @@
  *
  */
 
+import fs.FileUtils;
+
+import java.nio.ByteBuffer;
+import java.nio.channels.FileChannel;
 import java.sql.*;
 import java.util.*;
 import java.io.*;
@@ -31,16 +35,26 @@ public class LoadData {
     private static String[] argv;
 
     private static boolean writeCSV = false;
-    private static BufferedWriter configCSV = null;
-    private static BufferedWriter itemCSV = null;
-    private static BufferedWriter warehouseCSV = null;
-    private static BufferedWriter districtCSV = null;
-    private static BufferedWriter stockCSV = null;
-    private static BufferedWriter customerCSV = null;
-    private static BufferedWriter historyCSV = null;
-    private static BufferedWriter orderCSV = null;
-    private static BufferedWriter orderLineCSV = null;
-    private static BufferedWriter newOrderCSV = null;
+    //    private static BufferedWriter configCSV = null;
+//    private static BufferedWriter itemCSV = null;
+//    private static BufferedWriter warehouseCSV = null;
+//    private static BufferedWriter districtCSV = null;
+//    private static BufferedWriter stockCSV = null;
+//    private static BufferedWriter customerCSV = null;
+//    private static BufferedWriter historyCSV = null;
+//    private static BufferedWriter orderCSV = null;
+//    private static BufferedWriter orderLineCSV = null;
+//    private static BufferedWriter newOrderCSV = null;
+    private static FileChannel configCSV = null;
+    private static FileChannel itemCSV = null;
+    private static FileChannel warehouseCSV = null;
+    private static FileChannel districtCSV = null;
+    private static FileChannel stockCSV = null;
+    private static FileChannel customerCSV = null;
+    private static FileChannel historyCSV = null;
+    private static FileChannel orderCSV = null;
+    private static FileChannel orderLineCSV = null;
+    private static FileChannel newOrderCSV = null;
 
     public static void main(String[] args) {
         int i;
@@ -95,26 +109,36 @@ public class LoadData {
             writeCSV = true;
 
             try {
-                configCSV = new BufferedWriter(new FileWriter(fileLocation +
-                        "config.csv"));
-                itemCSV = new BufferedWriter(new FileWriter(fileLocation +
-                        "item.csv"));
-                warehouseCSV = new BufferedWriter(new FileWriter(fileLocation +
-                        "warehouse.csv"));
-                districtCSV = new BufferedWriter(new FileWriter(fileLocation +
-                        "district.csv"));
-                stockCSV = new BufferedWriter(new FileWriter(fileLocation +
-                        "stock.csv"));
-                customerCSV = new BufferedWriter(new FileWriter(fileLocation +
-                        "customer.csv"));
-                historyCSV = new BufferedWriter(new FileWriter(fileLocation +
-                        "cust-hist.csv"));
-                orderCSV = new BufferedWriter(new FileWriter(fileLocation +
-                        "order.csv"));
-                orderLineCSV = new BufferedWriter(new FileWriter(fileLocation +
-                        "order-line.csv"));
-                newOrderCSV = new BufferedWriter(new FileWriter(fileLocation +
-                        "new-order.csv"));
+//                configCSV = new BufferedWriter(new FileWriter(fileLocation +
+//                        "config.csv"));
+//                itemCSV = new BufferedWriter(new FileWriter(fileLocation +
+//                        "item.csv"));
+//                warehouseCSV = new BufferedWriter(new FileWriter(fileLocation +
+//                        "warehouse.csv"));
+//                districtCSV = new BufferedWriter(new FileWriter(fileLocation +
+//                        "district.csv"));
+//                stockCSV = new BufferedWriter(new FileWriter(fileLocation +
+//                        "stock.csv"));
+//                customerCSV = new BufferedWriter(new FileWriter(fileLocation +
+//                        "customer.csv"));
+//                historyCSV = new BufferedWriter(new FileWriter(fileLocation +
+//                        "cust-hist.csv"));
+//                orderCSV = new BufferedWriter(new FileWriter(fileLocation +
+//                        "order.csv"));
+//                orderLineCSV = new BufferedWriter(new FileWriter(fileLocation +
+//                        "order-line.csv"));
+//                newOrderCSV = new BufferedWriter(new FileWriter(fileLocation +
+//                        "new-order.csv"));
+                configCSV = FileUtils.open(fileLocation + "config.csv", "rw");
+                itemCSV = FileUtils.open(fileLocation + "item.csv", "rw");
+                warehouseCSV = FileUtils.open(fileLocation + "warehouse.csv", "rw");
+                districtCSV = FileUtils.open(fileLocation + "district.csv", "rw");
+                stockCSV = FileUtils.open(fileLocation + "stock.csv", "rw");
+                customerCSV = FileUtils.open(fileLocation + "customer.csv", "rw");
+                historyCSV = FileUtils.open(fileLocation + "cust-hist.csv", "rw");
+                orderCSV = FileUtils.open(fileLocation + "order.csv", "rw");
+                orderLineCSV = FileUtils.open(fileLocation + "order-line.csv", "rw");
+                newOrderCSV = FileUtils.open(fileLocation + "new-order.csv", "rw");
             } catch (IOException ie) {
                 System.err.println(ie.getMessage());
                 System.exit(3);
@@ -185,7 +209,7 @@ public class LoadData {
     public static void configAppend(StringBuffer buf)
             throws IOException {
         synchronized (configCSV) {
-            configCSV.write(buf.toString());
+            configCSV.write(ByteBuffer.wrap(buf.toString().getBytes()));
         }
         buf.setLength(0);
     }
@@ -193,7 +217,7 @@ public class LoadData {
     public static void itemAppend(StringBuffer buf)
             throws IOException {
         synchronized (itemCSV) {
-            itemCSV.write(buf.toString());
+            itemCSV.write(ByteBuffer.wrap(buf.toString().getBytes()));
         }
         buf.setLength(0);
     }
@@ -201,7 +225,7 @@ public class LoadData {
     public static void warehouseAppend(StringBuffer buf)
             throws IOException {
         synchronized (warehouseCSV) {
-            warehouseCSV.write(buf.toString());
+            warehouseCSV.write(ByteBuffer.wrap(buf.toString().getBytes()));
         }
         buf.setLength(0);
     }
@@ -209,7 +233,7 @@ public class LoadData {
     public static void districtAppend(StringBuffer buf)
             throws IOException {
         synchronized (districtCSV) {
-            districtCSV.write(buf.toString());
+            districtCSV.write(ByteBuffer.wrap(buf.toString().getBytes()));
         }
         buf.setLength(0);
     }
@@ -217,7 +241,7 @@ public class LoadData {
     public static void stockAppend(StringBuffer buf)
             throws IOException {
         synchronized (stockCSV) {
-            stockCSV.write(buf.toString());
+            stockCSV.write(ByteBuffer.wrap(buf.toString().getBytes()));
         }
         buf.setLength(0);
     }
@@ -225,7 +249,7 @@ public class LoadData {
     public static void customerAppend(StringBuffer buf)
             throws IOException {
         synchronized (customerCSV) {
-            customerCSV.write(buf.toString());
+            customerCSV.write(ByteBuffer.wrap(buf.toString().getBytes()));
         }
         buf.setLength(0);
     }
@@ -233,7 +257,7 @@ public class LoadData {
     public static void historyAppend(StringBuffer buf)
             throws IOException {
         synchronized (historyCSV) {
-            historyCSV.write(buf.toString());
+            historyCSV.write(ByteBuffer.wrap(buf.toString().getBytes()));
         }
         buf.setLength(0);
     }
@@ -241,7 +265,7 @@ public class LoadData {
     public static void orderAppend(StringBuffer buf)
             throws IOException {
         synchronized (orderCSV) {
-            orderCSV.write(buf.toString());
+            orderCSV.write(ByteBuffer.wrap(buf.toString().getBytes()));
         }
         buf.setLength(0);
     }
@@ -249,7 +273,7 @@ public class LoadData {
     public static void orderLineAppend(StringBuffer buf)
             throws IOException {
         synchronized (orderLineCSV) {
-            orderLineCSV.write(buf.toString());
+            orderLineCSV.write(ByteBuffer.wrap(buf.toString().getBytes()));
         }
         buf.setLength(0);
     }
@@ -257,7 +281,7 @@ public class LoadData {
     public static void newOrderAppend(StringBuffer buf)
             throws IOException {
         synchronized (newOrderCSV) {
-            newOrderCSV.write(buf.toString());
+            newOrderCSV.write(ByteBuffer.wrap(buf.toString().getBytes()));
         }
         buf.setLength(0);
     }

@@ -1,11 +1,12 @@
 db=mysql
 driver=com.mysql.jdbc.Driver
-conn=jdbc:mysql://127.0.0.1:3306/benchmarksql?rewriteBatchedStatements=true
-user=benchmarksql
-password=benchmarksql
+conn=jdbc:mysql://10.186.61.22:3306/benchmarksql?rewriteBatchedStatements=true&useSSL=false
+user=root
+password=123456
+fileLocation=D:\\workspace\\benchmarksql-5.0\\benchmarksql-5.0\\csv\\benchmarksql.
 
-warehouses=50
-loadWorkers=4
+warehouses=100
+loadWorkers=10
 
 terminals=200
 //To run specified transactions per terminal- runMins must equal zero
