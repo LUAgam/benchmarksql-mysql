@@ -85,19 +85,8 @@ public class FileNio extends FileBase {
     public synchronized int write(ByteBuffer src) throws IOException {
         try {
             int len;
-            if (fileLength < pos + src.remaining()) {
-                int length = (int) (fileLength - pos);
-                int limit = src.limit();
-                src.limit(length);
-                len = channel.write(src);
-                src.limit(limit);
-                pos += len;
-                return len;
-            } else {
-                len = channel.write(src);
-                pos += len;
-                return len;
-            }
+            len = channel.write(src);
+            return len;
         } catch (NonWritableChannelException e) {
             throw new IOException("read only");
         }
