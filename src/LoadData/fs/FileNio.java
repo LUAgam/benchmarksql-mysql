@@ -16,14 +16,14 @@ import java.nio.channels.NonWritableChannelException;
 /**
  * File which uses NIO FileChannel.
  */
-class FileNio extends FileBase {
+public class FileNio extends FileBase {
 
     private final String name;
     private final FileChannel channel;
     private long fileLength;
     private long pos;
 
-    FileNio(String fileName, String mode) throws IOException {
+    public FileNio(String fileName, String mode) throws IOException {
         this.name = fileName;
         RandomAccessFile file = new RandomAccessFile(fileName, mode);
         this.channel = file.getChannel();

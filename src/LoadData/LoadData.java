@@ -7,6 +7,7 @@
  *
  */
 
+import fs.FileNio;
 import fs.FileUtils;
 
 import java.nio.ByteBuffer;
@@ -129,16 +130,16 @@ public class LoadData {
 //                        "order-line.csv"));
 //                newOrderCSV = new BufferedWriter(new FileWriter(fileLocation +
 //                        "new-order.csv"));
-                configCSV = FileUtils.open(fileLocation + "config.csv", "rw");
-                itemCSV = FileUtils.open(fileLocation + "item.csv", "rw");
-                warehouseCSV = FileUtils.open(fileLocation + "warehouse.csv", "rw");
-                districtCSV = FileUtils.open(fileLocation + "district.csv", "rw");
-                stockCSV = FileUtils.open(fileLocation + "stock.csv", "rw");
-                customerCSV = FileUtils.open(fileLocation + "customer.csv", "rw");
-                historyCSV = FileUtils.open(fileLocation + "cust-hist.csv", "rw");
-                orderCSV = FileUtils.open(fileLocation + "order.csv", "rw");
-                orderLineCSV = FileUtils.open(fileLocation + "order-line.csv", "rw");
-                newOrderCSV = FileUtils.open(fileLocation + "new-order.csv", "rw");
+                configCSV = new FileNio(fileLocation + "config.csv", "rw");
+                itemCSV = new FileNio(fileLocation + "item.csv", "rw");
+                warehouseCSV = new FileNio(fileLocation + "warehouse.csv", "rw");
+                districtCSV = new FileNio(fileLocation + "district.csv", "rw");
+                stockCSV = new FileNio(fileLocation + "stock.csv", "rw");
+                customerCSV = new FileNio(fileLocation + "customer.csv", "rw");
+                historyCSV = new FileNio(fileLocation + "cust-hist.csv", "rw");
+                orderCSV = new FileNio(fileLocation + "order.csv", "rw");
+                orderLineCSV = new FileNio(fileLocation + "order-line.csv", "rw");
+                newOrderCSV = new FileNio(fileLocation + "new-order.csv", "rw");
             } catch (IOException ie) {
                 System.err.println(ie.getMessage());
                 System.exit(3);
