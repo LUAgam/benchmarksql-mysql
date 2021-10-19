@@ -280,12 +280,18 @@ public class LoadDataWorker implements Runnable {
             }
 
             if (writeCSV) {
-                fmtItem.format("%d,%s,%.2f,%s,%d\n",
-                        i_id,
-                        rnd.getAString(14, 24),
-                        ((double) rnd.nextLong(100, 10000)) / 100.0,
-                        iData,
-                        rnd.nextInt(1, 10000));
+//                fmtItem.format("%d,%s,%.2f,%s,%d\n",
+//                        i_id,
+//                        rnd.getAString(14, 24),
+//                        ((double) rnd.nextLong(100, 10000)) / 100.0,
+//                        iData,
+//                        rnd.nextInt(1, 10000));
+
+                sbItem.append(i_id + ",")
+                        .append(rnd.getAString(14, 24) + ",")
+                        .append(((double) rnd.nextLong(100, 10000)) / 100.0 + ",")
+                        .append(iData + ",")
+                        .append(rnd.nextInt(1, 10000) + "\n");
 
             } else {
                 stmtItem.setInt(1, i_id);
@@ -322,16 +328,25 @@ public class LoadDataWorker implements Runnable {
          * Load the WAREHOUSE row.
          */
         if (writeCSV) {
-            fmtWarehouse.format("%d,%.2f,%.4f,%s,%s,%s,%s,%s,%s\n",
-                    w_id,
-                    300000.0,
-                    ((double) rnd.nextLong(0, 2000)) / 10000.0,
-                    rnd.getAString(6, 10),
-                    rnd.getAString(10, 20),
-                    rnd.getAString(10, 20),
-                    rnd.getAString(10, 20),
-                    rnd.getState(),
-                    rnd.getNString(4, 4) + "11111");
+//            fmtWarehouse.format("%d,%.2f,%.4f,%s,%s,%s,%s,%s,%s\n",
+//                    w_id,
+//                    300000.0,
+//                    ((double) rnd.nextLong(0, 2000)) / 10000.0,
+//                    rnd.getAString(6, 10),
+//                    rnd.getAString(10, 20),
+//                    rnd.getAString(10, 20),
+//                    rnd.getAString(10, 20),
+//                    rnd.getState(),
+//                    rnd.getNString(4, 4) + "11111");
+            sbWarehouse.append(w_id + ",")
+                    .append(300000.0 + ",")
+                    .append(((double) rnd.nextLong(0, 2000)) / 10000.0 + ",")
+                    .append(rnd.getAString(6, 10) + ",")
+                    .append(rnd.getAString(10, 20) + ",")
+                    .append(rnd.getAString(10, 20) + ",")
+                    .append(rnd.getAString(10, 20) + ",")
+                    .append(rnd.getState() + ",")
+                    .append(rnd.getNString(4, 4) + "11111\n");
 
             LoadData.warehouseAppend(sbWarehouse);
         } else {
@@ -378,25 +393,42 @@ public class LoadDataWorker implements Runnable {
             }
 
             if (writeCSV) {
-                fmtStock.format("%d,%d,%d,%d,%d,%d,%s," +
-                                "%s,%s,%s,%s,%s,%s,%s,%s,%s,%s\n",
-                        s_i_id,
-                        w_id,
-                        rnd.nextInt(10, 100),
-                        0,
-                        0,
-                        0,
-                        sData,
-                        rnd.getAString(24, 24),
-                        rnd.getAString(24, 24),
-                        rnd.getAString(24, 24),
-                        rnd.getAString(24, 24),
-                        rnd.getAString(24, 24),
-                        rnd.getAString(24, 24),
-                        rnd.getAString(24, 24),
-                        rnd.getAString(24, 24),
-                        rnd.getAString(24, 24),
-                        rnd.getAString(24, 24));
+//                fmtStock.format("%d,%d,%d,%d,%d,%d,%s," +
+//                                "%s,%s,%s,%s,%s,%s,%s,%s,%s,%s\n",
+//                        s_i_id,
+//                        w_id,
+//                        rnd.nextInt(10, 100),
+//                        0,
+//                        0,
+//                        0,
+//                        sData,
+//                        rnd.getAString(24, 24),
+//                        rnd.getAString(24, 24),
+//                        rnd.getAString(24, 24),
+//                        rnd.getAString(24, 24),
+//                        rnd.getAString(24, 24),
+//                        rnd.getAString(24, 24),
+//                        rnd.getAString(24, 24),
+//                        rnd.getAString(24, 24),
+//                        rnd.getAString(24, 24),
+//                        rnd.getAString(24, 24));
+                sbStock.append(s_i_id + ",")
+                        .append(w_id + ",")
+                        .append(rnd.nextInt(10, 100) + ",")
+                        .append(0 + ",")
+                        .append(0 + ",")
+                        .append(0 + ",")
+                        .append(sData + ",")
+                        .append(rnd.getAString(24, 24) + ",")
+                        .append(rnd.getAString(24, 24) + ",")
+                        .append(rnd.getAString(24, 24) + ",")
+                        .append(rnd.getAString(24, 24) + ",")
+                        .append(rnd.getAString(24, 24) + ",")
+                        .append(rnd.getAString(24, 24) + ",")
+                        .append(rnd.getAString(24, 24) + ",")
+                        .append(rnd.getAString(24, 24) + ",")
+                        .append(rnd.getAString(24, 24) + ",")
+                        .append(rnd.getAString(24, 24) + "\n");
             } else {
                 stmtStock.setInt(1, s_i_id);
                 stmtStock.setInt(2, w_id);
@@ -432,18 +464,30 @@ public class LoadDataWorker implements Runnable {
          */
         for (int d_id = 1; d_id <= 10; d_id++) {
             if (writeCSV) {
-                fmtDistrict.format("%d,%d,%.2f,%.4f,%d,%s,%s,%s,%s,%s,%s\n",
-                        d_id,
-                        w_id,
-                        30000.0,
-                        ((double) rnd.nextLong(0, 2000)) / 10000.0,
-                        3001,
-                        rnd.getAString(6, 10),
-                        rnd.getAString(10, 20),
-                        rnd.getAString(10, 20),
-                        rnd.getAString(10, 20),
-                        rnd.getState(),
-                        rnd.getNString(4, 4) + "11111");
+//                fmtDistrict.format("%d,%d,%.2f,%.4f,%d,%s,%s,%s,%s,%s,%s\n",
+//                        d_id,
+//                        w_id,
+//                        30000.0,
+//                        ((double) rnd.nextLong(0, 2000)) / 10000.0,
+//                        3001,
+//                        rnd.getAString(6, 10),
+//                        rnd.getAString(10, 20),
+//                        rnd.getAString(10, 20),
+//                        rnd.getAString(10, 20),
+//                        rnd.getState(),
+//                        rnd.getNString(4, 4) + "11111");
+
+                sbDistrict.append(d_id + ",")
+                        .append(w_id + ",")
+                        .append(30000.0 + ",")
+                        .append(((double) rnd.nextLong(0, 2000)) / 10000.0 + ",")
+                        .append(3001 + ",")
+                        .append(rnd.getAString(6, 10) + ",")
+                        .append(rnd.getAString(10, 20) + ",")
+                        .append(rnd.getAString(10, 20) + ",")
+                        .append(rnd.getAString(10, 20) + ",")
+                        .append(rnd.getState() + ",")
+                        .append(rnd.getNString(4, 4) + "11111\n");
 
                 LoadData.districtAppend(sbDistrict);
             } else {
@@ -467,30 +511,52 @@ public class LoadDataWorker implements Runnable {
              */
             for (int c_id = 1; c_id <= 3000; c_id++) {
                 if (writeCSV) {
-                    fmtCustomer.format("%d,%d,%d,%.4f,%s,%s,%s," +
-                                    "%.2f,%.2f,%.2f,%d,%d," +
-                                    "%s,%s,%s,%s,%s,%s,%s,%s,%s\n",
-                            c_id,
-                            d_id,
-                            w_id,
-                            ((double) rnd.nextLong(0, 5000)) / 10000.0,
-                            (rnd.nextInt(1, 100) <= 90) ? "GC" : "BC",
-                            (c_id <= 1000) ? rnd.getCLast(c_id - 1) : rnd.getCLast(),
-                            rnd.getAString(8, 16),
-                            50000.00,
-                            -10.00,
-                            10.00,
-                            1,
-                            0,
-                            rnd.getAString(10, 20),
-                            rnd.getAString(10, 20),
-                            rnd.getAString(10, 20),
-                            rnd.getState(),
-                            rnd.getNString(4, 4) + "11111",
-                            rnd.getNString(16, 16),
-                            new java.sql.Timestamp(System.currentTimeMillis()).toString(),
-                            "OE",
-                            rnd.getAString(300, 500));
+//                    fmtCustomer.format("%d,%d,%d,%.4f,%s,%s,%s," +
+//                                    "%.2f,%.2f,%.2f,%d,%d," +
+//                                    "%s,%s,%s,%s,%s,%s,%s,%s,%s\n",
+//                            c_id,
+//                            d_id,
+//                            w_id,
+//                            ((double) rnd.nextLong(0, 5000)) / 10000.0,
+//                            (rnd.nextInt(1, 100) <= 90) ? "GC" : "BC",
+//                            (c_id <= 1000) ? rnd.getCLast(c_id - 1) : rnd.getCLast(),
+//                            rnd.getAString(8, 16),
+//                            50000.00,
+//                            -10.00,
+//                            10.00,
+//                            1,
+//                            0,
+//                            rnd.getAString(10, 20),
+//                            rnd.getAString(10, 20),
+//                            rnd.getAString(10, 20),
+//                            rnd.getState(),
+//                            rnd.getNString(4, 4) + "11111",
+//                            rnd.getNString(16, 16),
+//                            new java.sql.Timestamp(System.currentTimeMillis()).toString(),
+//                            "OE",
+//                            rnd.getAString(300, 500));
+
+                    sbCustomer.append(c_id + ",")
+                            .append(d_id + ",")
+                            .append(w_id + ",")
+                            .append(((double) rnd.nextLong(0, 5000)) / 10000.0 + ",")
+                            .append((rnd.nextInt(1, 100) <= 90) ? "GC" : "BC" + ",")
+                            .append((c_id <= 1000) ? rnd.getCLast(c_id - 1) : rnd.getCLast() + ",")
+                            .append(rnd.getAString(8, 16) + ",")
+                            .append(50000.00 + ",")
+                            .append(-10.00 + ",")
+                            .append(10.00 + ",")
+                            .append(1 + ",")
+                            .append(0 + ",")
+                            .append(rnd.getAString(10, 20) + ",")
+                            .append(rnd.getAString(10, 20) + ",")
+                            .append(rnd.getAString(10, 20) + ",")
+                            .append(rnd.getState() + ",")
+                            .append(rnd.getNString(4, 4) + "11111" + ",")
+                            .append(rnd.getNString(16, 16) + ",")
+                            .append(new java.sql.Timestamp(System.currentTimeMillis()).toString() + ",")
+                            .append("OE,")
+                            .append(rnd.getAString(300, 500) + "\n");
                 } else {
                     stmtCustomer.setInt(1, c_id);
                     stmtCustomer.setInt(2, d_id);
@@ -527,16 +593,26 @@ public class LoadDataWorker implements Runnable {
                  * For each CUSTOMER there is one row in HISTORY.
                  */
                 if (writeCSV) {
-                    fmtHistory.format("%d,%d,%d,%d,%d,%d,%s,%.2f,%s\n",
-                            (w_id - 1) * 30000 + (d_id - 1) * 3000 + c_id,
-                            c_id,
-                            d_id,
-                            w_id,
-                            d_id,
-                            w_id,
-                            new java.sql.Timestamp(System.currentTimeMillis()).toString(),
-                            10.00,
-                            rnd.getAString(12, 24));
+//                    fmtHistory.format("%d,%d,%d,%d,%d,%d,%s,%.2f,%s\n",
+//                            (w_id - 1) * 30000 + (d_id - 1) * 3000 + c_id,
+//                            c_id,
+//                            d_id,
+//                            w_id,
+//                            d_id,
+//                            w_id,
+//                            new java.sql.Timestamp(System.currentTimeMillis()).toString(),
+//                            10.00,
+//                            rnd.getAString(12, 24));
+                    sbHistory.append((w_id - 1) * 30000 + (d_id - 1) * 3000 + c_id + ",")
+                            .append(c_id + ",")
+                            .append(d_id + ",")
+                            .append(w_id + ",")
+                            .append(d_id + ",")
+                            .append(w_id + ",")
+                            .append(new java.sql.Timestamp(System.currentTimeMillis()).toString() + ",")
+                            .append(10.00 + ",")
+                            .append(rnd.getAString(12, 24) + "\n");
+
                 } else {
                     stmtHistory.setInt(1, (w_id - 1) * 30000 + (d_id - 1) * 3000 + c_id);
                     stmtHistory.setInt(2, c_id);
@@ -583,15 +659,25 @@ public class LoadDataWorker implements Runnable {
                 int o_ol_cnt = rnd.nextInt(5, 15);
 
                 if (writeCSV) {
-                    fmtOrder.format("%d,%d,%d,%d,%s,%d,%d,%s\n",
-                            o_id,
-                            w_id,
-                            d_id,
-                            randomCID[o_id - 1],
-                            (o_id < 2101) ? rnd.nextInt(1, 10) : csvNull,
-                            o_ol_cnt,
-                            1,
-                            new java.sql.Timestamp(System.currentTimeMillis()).toString());
+//                    fmtOrder.format("%d,%d,%d,%d,%s,%d,%d,%s\n",
+//                            o_id,
+//                            w_id,
+//                            d_id,
+//                            randomCID[o_id - 1],
+//                            (o_id < 2101) ? rnd.nextInt(1, 10) : csvNull,
+//                            o_ol_cnt,
+//                            1,
+//                            new java.sql.Timestamp(System.currentTimeMillis()).toString());
+                    sbOrder.append(o_id + ",")
+                            .append(w_id + ",")
+                            .append(d_id + ",")
+                            .append(randomCID[o_id - 1] + ",")
+                            .append((o_id < 2101) ? rnd.nextInt(1, 10) : csvNull + ",")
+                            .append(o_ol_cnt + ",")
+                            .append(1 + ",")
+                            .append(new java.sql.Timestamp(System.currentTimeMillis()).toString() + "\n");
+
+
                 } else {
                     stmtOrder.setInt(1, o_id);
                     stmtOrder.setInt(2, d_id);
@@ -615,17 +701,29 @@ public class LoadDataWorker implements Runnable {
                     long now = System.currentTimeMillis();
 
                     if (writeCSV) {
-                        fmtOrderLine.format("%d,%d,%d,%d,%d,%s,%.2f,%d,%d,%s\n",
-                                w_id,
-                                d_id,
-                                o_id,
-                                ol_number,
-                                rnd.nextInt(1, 100000),
-                                (o_id < 2101) ? new java.sql.Timestamp(now).toString() : csvNull,
-                                (o_id < 2101) ? 0.00 : ((double) rnd.nextLong(1, 999999)) / 100.0,
-                                w_id,
-                                5,
-                                rnd.getAString(24, 24));
+//                        fmtOrderLine.format("%d,%d,%d,%d,%d,%s,%.2f,%d,%d,%s\n",
+//                                w_id,
+//                                d_id,
+//                                o_id,
+//                                ol_number,
+//                                rnd.nextInt(1, 100000),
+//                                (o_id < 2101) ? new java.sql.Timestamp(now).toString() : csvNull,
+//                                (o_id < 2101) ? 0.00 : ((double) rnd.nextLong(1, 999999)) / 100.0,
+//                                w_id,
+//                                5,
+//                                rnd.getAString(24, 24));
+
+                        sbOrderLine.append(w_id + ",")
+                                .append(d_id + ",")
+                                .append(o_id + ",")
+                                .append(ol_number + ",")
+                                .append(rnd.nextInt(1, 100000) + ",")
+                                .append((o_id < 2101) ? new java.sql.Timestamp(now).toString() : csvNull + ",")
+                                .append((o_id < 2101) ? 0.00 : ((double) rnd.nextLong(1, 999999)) / 100.0 + ",")
+                                .append(w_id + ",")
+                                .append(5 + ",")
+                                .append(rnd.getAString(24, 24) + "\n");
+
                     } else {
                         stmtOrderLine.setInt(1, o_id);
                         stmtOrderLine.setInt(2, d_id);
@@ -654,10 +752,14 @@ public class LoadDataWorker implements Runnable {
                  */
                 if (o_id >= 2101) {
                     if (writeCSV) {
-                        fmtNewOrder.format("%d,%d,%d\n",
-                                w_id,
-                                d_id,
-                                o_id);
+//                        fmtNewOrder.format("%d,%d,%d\n",
+//                                w_id,
+//                                d_id,
+//                                o_id);
+
+                        sbNewOrder.append(w_id + ",")
+                                .append(d_id + ",")
+                                .append(o_id + "\n");
                     } else {
                         stmtNewOrder.setInt(1, o_id);
                         stmtNewOrder.setInt(2, d_id);
