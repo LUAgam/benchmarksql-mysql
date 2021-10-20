@@ -411,8 +411,8 @@ public class LoadDataWorker implements Runnable {
                         .append(rnd.getAString(24, 24) + ",")
                         .append(rnd.getAString(24, 24) + "\n");
             } else {
-                stmtStock.setInt(1, w_id);
-                stmtStock.setInt(2, s_i_id);
+                stmtStock.setInt(1, s_i_id);
+                stmtStock.setInt(2, w_id);
                 stmtStock.setInt(3, rnd.nextInt(10, 100));
                 stmtStock.setString(4, rnd.getAString(24, 24));
                 stmtStock.setString(5, rnd.getAString(24, 24));
@@ -472,8 +472,8 @@ public class LoadDataWorker implements Runnable {
 
                 LoadData.districtAppend(sbDistrict);
             } else {
-                stmtDistrict.setInt(1, w_id);
-                stmtDistrict.setInt(2, d_id);
+                stmtDistrict.setInt(1, d_id);
+                stmtDistrict.setInt(2, w_id);
                 stmtDistrict.setString(3, rnd.getAString(6, 10));
                 stmtDistrict.setString(4, rnd.getAString(10, 20));
                 stmtDistrict.setString(5, rnd.getAString(10, 20));
@@ -539,9 +539,9 @@ public class LoadDataWorker implements Runnable {
                             .append("OE,")
                             .append(rnd.getAString(300, 500) + "\n");
                 } else {
-                    stmtCustomer.setInt(1, w_id);
+                    stmtCustomer.setInt(1, c_id);
                     stmtCustomer.setInt(2, d_id);
-                    stmtCustomer.setInt(3, c_id);
+                    stmtCustomer.setInt(3, w_id);
                     stmtCustomer.setString(4, rnd.getAString(8, 16));
                     stmtCustomer.setString(5, "OE");
                     if (c_id <= 1000)
@@ -660,9 +660,9 @@ public class LoadDataWorker implements Runnable {
 
 
                 } else {
-                    stmtOrder.setInt(1, w_id);
+                    stmtOrder.setInt(1, o_id);
                     stmtOrder.setInt(2, d_id);
-                    stmtOrder.setInt(3, o_id);
+                    stmtOrder.setInt(3, w_id);
                     stmtOrder.setInt(4, randomCID[o_id - 1]);
                     stmtOrder.setTimestamp(5, new java.sql.Timestamp(System.currentTimeMillis()));
                     if (o_id < 2101)
@@ -706,9 +706,9 @@ public class LoadDataWorker implements Runnable {
                                 .append(rnd.getAString(24, 24) + "\n");
 
                     } else {
-                        stmtOrderLine.setInt(1, w_id);
+                        stmtOrderLine.setInt(1, o_id);
                         stmtOrderLine.setInt(2, d_id);
-                        stmtOrderLine.setInt(3, o_id);
+                        stmtOrderLine.setInt(3, w_id);
                         stmtOrderLine.setInt(4, ol_number);
                         stmtOrderLine.setInt(5, rnd.nextInt(1, 100000));
                         stmtOrderLine.setInt(6, w_id);
@@ -742,9 +742,9 @@ public class LoadDataWorker implements Runnable {
                                 .append(d_id + ",")
                                 .append(o_id + "\n");
                     } else {
-                        stmtNewOrder.setInt(1, w_id);
+                        stmtNewOrder.setInt(1, o_id);
                         stmtNewOrder.setInt(2, d_id);
-                        stmtNewOrder.setInt(3, o_id);
+                        stmtNewOrder.setInt(3, w_id);
 
                         stmtNewOrder.addBatch();
                     }
