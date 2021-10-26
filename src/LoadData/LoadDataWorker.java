@@ -621,7 +621,7 @@ public class LoadDataWorker implements Runnable {
                                 o_id,
                                 ol_number,
                                 rnd.nextInt(1, 100000),
-                                (o_id < 2101) ? new java.sql.Timestamp(now).toString() : csvNull,
+                                new java.sql.Timestamp(now).toString(),
                                 (o_id < 2101) ? 0.00 : ((double) rnd.nextLong(1, 999999)) / 100.0,
                                 w_id,
                                 5,
