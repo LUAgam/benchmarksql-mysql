@@ -12,6 +12,7 @@ import java.util.*;
 import java.sql.*;
 
 public class jTPCCTData {
+    private static org.apache.log4j.Logger log = Logger.getLogger("sql-exec-time.log");
     protected int numWarehouses = 0;
 
     public final static int
@@ -335,7 +336,7 @@ public class jTPCCTData {
             stmt = db.stmtNewOrderSelectDist;
             stmt.setInt(1, newOrder.w_id);
             stmt.setInt(2, newOrder.d_id);
-            rs = stmt.executeQuery();
+            rs = executeQuery(stmt, "stmtNewOrderSelectDist");
             if (!rs.next()) {
                 rs.close();
                 throw new SQLException("District for" +
@@ -352,7 +353,7 @@ public class jTPCCTData {
             stmt.setInt(1, newOrder.w_id);
             stmt.setInt(2, newOrder.d_id);
             stmt.setInt(3, newOrder.c_id);
-            rs = stmt.executeQuery();
+            rs = executeQuery(stmt, "stmtNewOrderSelectWhseCust");
             if (!rs.next()) {
                 rs.close();
                 throw new SQLException("Warehouse or Customer for" +
@@ -370,7 +371,7 @@ public class jTPCCTData {
             stmt = db.stmtNewOrderUpdateDist;
             stmt.setInt(1, newOrder.w_id);
             stmt.setInt(2, newOrder.d_id);
-            stmt.executeUpdate();
+            executeUpdate(stmt, "stmtNewOrderUpdateDist");
 
             // Insert the ORDER row
             stmt = db.stmtNewOrderInsertOrder;
@@ -381,14 +382,14 @@ public class jTPCCTData {
             stmt.setTimestamp(5, new java.sql.Timestamp(System.currentTimeMillis()));
             stmt.setInt(6, ol_cnt);
             stmt.setInt(7, o_all_local);
-            stmt.executeUpdate();
+            executeUpdate(stmt, "stmtNewOrderInsertOrder");
 
             // Insert the NEW_ORDER row
             stmt = db.stmtNewOrderInsertNewOrder;
             stmt.setInt(1, o_id);
             stmt.setInt(2, newOrder.d_id);
             stmt.setInt(3, newOrder.w_id);
-            stmt.executeUpdate();
+            executeUpdate(stmt, "stmtNewOrderInsertNewOrder");
 
             // Per ORDER_LINE
             insertOrderLineBatch = db.stmtNewOrderInsertOrderLine;
@@ -400,7 +401,7 @@ public class jTPCCTData {
 
                 stmt = db.stmtNewOrderSelectItem;
                 stmt.setInt(1, newOrder.ol_i_id[seq]);
-                rs = stmt.executeQuery();
+                rs = executeQuery(stmt, "stmtNewOrderSelectItem");
                 if (!rs.next()) {
                     rs.close();
 
@@ -448,7 +449,7 @@ public class jTPCCTData {
                 stmt = db.stmtNewOrderSelectStock;
                 stmt.setInt(1, newOrder.ol_supply_w_id[seq]);
                 stmt.setInt(2, newOrder.ol_i_id[seq]);
-                rs = stmt.executeQuery();
+                rs = executeQuery(stmt, "stmtNewOrderSelectStock");
                 if (!rs.next()) {
                     throw new Exception("STOCK with" +
                             " S_W_ID=" + newOrder.ol_supply_w_id[seq] +
@@ -569,6 +570,20 @@ public class jTPCCTData {
 	log.info("Reached the point of creating one NEW_ORDER W_ID "+newOrder.w_id+" D_ID "+newOrder.d_id+" C_ID "+newOrder.c_id);
 	System.exit(0);
 	*/
+    }
+
+    private ResultSet executeQuery(PreparedStatement stmt, String scene) throws SQLException {
+        long start = System.currentTimeMillis();
+        ResultSet rs = stmt.executeQuery();
+        log.info("scene:" + scene + "|sql:" + stmt + "|time:" + (System.currentTimeMillis() - start));
+        return rs;
+    }
+
+    private int executeUpdate(PreparedStatement stmt, String scene) throws SQLException {
+        long start = System.currentTimeMillis();
+        int i = stmt.executeUpdate();
+        log.info("scene:" + scene + "|sql:" + stmt + "|time:" + (System.currentTimeMillis() - start));
+        return i;
     }
 
     private void traceNewOrder(Logger log, Formatter fmt[]) {
@@ -708,13 +723,13 @@ public class jTPCCTData {
             stmt.setDouble(1, payment.h_amount);
             stmt.setInt(2, payment.w_id);
             stmt.setInt(3, payment.d_id);
-            stmt.executeUpdate();
+            executeUpdate(stmt, "stmtPaymentUpdateDistrict");
 
             // Select the DISTRICT.
             stmt = db.stmtPaymentSelectDistrict;
             stmt.setInt(1, payment.w_id);
             stmt.setInt(2, payment.d_id);
-            rs = stmt.executeQuery();
+            rs = executeQuery(stmt, "stmtPaymentSelectDistrict");
             if (!rs.next()) {
                 rs.close();
                 throw new Exception("District for" +
@@ -733,12 +748,12 @@ public class jTPCCTData {
             stmt = db.stmtPaymentUpdateWarehouse;
             stmt.setDouble(1, payment.h_amount);
             stmt.setInt(2, payment.w_id);
-            stmt.executeUpdate();
+            executeUpdate(stmt, "stmtPaymentUpdateWarehouse");
 
             // Select the WAREHOUSE.
             stmt = db.stmtPaymentSelectWarehouse;
             stmt.setInt(1, payment.w_id);
-            rs = stmt.executeQuery();
+            rs = executeQuery(stmt, "stmtPaymentSelectWarehouse");
             if (!rs.next()) {
                 rs.close();
                 throw new Exception("Warehouse for" +
@@ -758,7 +773,7 @@ public class jTPCCTData {
                 stmt.setInt(1, payment.c_w_id);
                 stmt.setInt(2, payment.c_d_id);
                 stmt.setString(3, payment.c_last);
-                rs = stmt.executeQuery();
+                rs = executeQuery(stmt, "stmtPaymentSelectCustomerListByLast");
                 while (rs.next())
                     c_id_list.add(rs.getInt("c_id"));
                 rs.close();
@@ -778,7 +793,7 @@ public class jTPCCTData {
             stmt.setInt(1, payment.c_w_id);
             stmt.setInt(2, payment.c_d_id);
             stmt.setInt(3, payment.c_id);
-            rs = stmt.executeQuery();
+            rs = executeQuery(stmt, "stmtPaymentSelectCustomer");
             if (!rs.next()) {
                 throw new Exception("Customer for" +
                         " C_W_ID=" + payment.c_w_id +
@@ -813,14 +828,14 @@ public class jTPCCTData {
                 stmt.setInt(3, payment.c_w_id);
                 stmt.setInt(4, payment.c_d_id);
                 stmt.setInt(5, payment.c_id);
-                stmt.executeUpdate();
+                executeUpdate(stmt, "stmtPaymentUpdateCustomer");
             } else {
                 // Customer with bad credit, need to do the C_DATA work.
                 stmt = db.stmtPaymentSelectCustomerData;
                 stmt.setInt(1, payment.c_w_id);
                 stmt.setInt(2, payment.c_d_id);
                 stmt.setInt(3, payment.c_id);
-                rs = stmt.executeQuery();
+                rs = executeQuery(stmt, "stmtPaymentSelectCustomerData");
                 if (!rs.next()) {
                     throw new Exception("Customer.c_data for" +
                             " C_W_ID=" + payment.c_w_id +
@@ -849,7 +864,7 @@ public class jTPCCTData {
                 stmt.setInt(4, payment.c_w_id);
                 stmt.setInt(5, payment.c_d_id);
                 stmt.setInt(6, payment.c_id);
-                stmt.executeUpdate();
+                executeUpdate(stmt, "stmtPaymentUpdateCustomerWithData");
             }
 
             // Insert the HISORY row.
@@ -862,7 +877,7 @@ public class jTPCCTData {
             stmt.setTimestamp(6, new java.sql.Timestamp(h_date));
             stmt.setDouble(7, payment.h_amount);
             stmt.setString(8, payment.w_name + "    " + payment.d_name);
-            stmt.executeUpdate();
+            executeUpdate(stmt, "stmtPaymentInsertHistory");
 
             payment.h_date = new java.sql.Timestamp(h_date).toString();
 
@@ -1047,7 +1062,7 @@ public class jTPCCTData {
                 stmt.setInt(1, orderStatus.w_id);
                 stmt.setInt(2, orderStatus.d_id);
                 stmt.setString(3, orderStatus.c_last);
-                rs = stmt.executeQuery();
+                rs = executeQuery(stmt, "stmtOrderStatusSelectCustomerListByLast");
                 while (rs.next())
                     c_id_list.add(rs.getInt("c_id"));
                 rs.close();
@@ -1067,7 +1082,7 @@ public class jTPCCTData {
             stmt.setInt(1, orderStatus.w_id);
             stmt.setInt(2, orderStatus.d_id);
             stmt.setInt(3, orderStatus.c_id);
-            rs = stmt.executeQuery();
+            rs = executeQuery(stmt, "stmtOrderStatusSelectCustomer");
             if (!rs.next()) {
                 throw new Exception("Customer for" +
                         " C_W_ID=" + orderStatus.w_id +
@@ -1089,7 +1104,7 @@ public class jTPCCTData {
             stmt.setInt(4, orderStatus.w_id);
             stmt.setInt(5, orderStatus.d_id);
             stmt.setInt(6, orderStatus.c_id);
-            rs = stmt.executeQuery();
+            rs = executeQuery(stmt, "stmtOrderStatusSelectLastOrder");
             if (!rs.next()) {
                 throw new Exception("Last Order for" +
                         " W_ID=" + orderStatus.w_id +
@@ -1107,7 +1122,7 @@ public class jTPCCTData {
             stmt.setInt(1, orderStatus.w_id);
             stmt.setInt(2, orderStatus.d_id);
             stmt.setInt(3, orderStatus.o_id);
-            rs = stmt.executeQuery();
+            rs = executeQuery(stmt, "stmtOrderStatusSelectOrderLine");
             while (rs.next()) {
                 Timestamp ol_delivery_d;
 
@@ -1260,7 +1275,7 @@ public class jTPCCTData {
             stmt.setInt(2, stockLevel.threshold);
             stmt.setInt(3, stockLevel.w_id);
             stmt.setInt(4, stockLevel.d_id);
-            rs = stmt.executeQuery();
+            rs = executeQuery(stmt, "stmtStockLevelSelectLow");
             if (!rs.next()) {
                 throw new Exception("Failed to get low-stock for" +
                         " W_ID=" + stockLevel.w_id +
@@ -1466,7 +1481,7 @@ public class jTPCCTData {
                 while (o_id < 0) {
                     stmt1.setInt(1, deliveryBG.w_id);
                     stmt1.setInt(2, d_id);
-                    rs = stmt1.executeQuery();
+                    rs = executeQuery(stmt1, "stmtDeliveryBGSelectOldestNewOrder");
                     if (!rs.next()) {
                         rs.close();
                         break;
@@ -1477,7 +1492,7 @@ public class jTPCCTData {
                     stmt2.setInt(1, deliveryBG.w_id);
                     stmt2.setInt(2, d_id);
                     stmt2.setInt(3, o_id);
-                    rc = stmt2.executeUpdate();
+                    rc = executeUpdate(stmt2,"stmtDeliveryBGDeleteOldestNewOrder");
                     if (rc == 0) {
                         /*
                          * Failed to delete the NEW_ORDER row. This is not
@@ -1511,14 +1526,14 @@ public class jTPCCTData {
                 stmt1.setInt(2, deliveryBG.w_id);
                 stmt1.setInt(3, d_id);
                 stmt1.setInt(4, o_id);
-                stmt1.executeUpdate();
+                executeUpdate(stmt1,"stmtDeliveryBGUpdateOrder");
 
                 // Get the o_c_id from the ORDER.
                 stmt1 = db.stmtDeliveryBGSelectOrder;
                 stmt1.setInt(1, deliveryBG.w_id);
                 stmt1.setInt(2, d_id);
                 stmt1.setInt(3, o_id);
-                rs = stmt1.executeQuery();
+                rs = executeQuery(stmt1, "stmtDeliveryBGSelectOrder");
                 if (!rs.next()) {
                     rs.close();
                     throw new Exception("ORDER in DELIVERY_BG for" +
@@ -1535,14 +1550,14 @@ public class jTPCCTData {
                 stmt1.setInt(2, deliveryBG.w_id);
                 stmt1.setInt(3, d_id);
                 stmt1.setInt(4, o_id);
-                stmt1.executeUpdate();
+                executeUpdate(stmt1,"stmtDeliveryBGUpdateOrderLine");
 
                 // Select the sum(ol_amount) from ORDER_LINE.
                 stmt1 = db.stmtDeliveryBGSelectSumOLAmount;
                 stmt1.setInt(1, deliveryBG.w_id);
                 stmt1.setInt(2, d_id);
                 stmt1.setInt(3, o_id);
-                rs = stmt1.executeQuery();
+                rs = executeQuery(stmt1, "stmtDeliveryBGSelectSumOLAmount");
                 if (!rs.next()) {
                     rs.close();
                     throw new Exception("sum(OL_AMOUNT) for ORDER_LINEs with " +
@@ -1559,7 +1574,7 @@ public class jTPCCTData {
                 stmt1.setInt(2, deliveryBG.w_id);
                 stmt1.setInt(3, d_id);
                 stmt1.setInt(4, c_id);
-                stmt1.executeUpdate();
+                executeUpdate(stmt1,"stmtDeliveryBGUpdateCustomer");
 
                 // Recored the delivered O_ID in the DELIVERY_BG
                 deliveryBG.delivered_o_id[d_id - 1] = o_id;
