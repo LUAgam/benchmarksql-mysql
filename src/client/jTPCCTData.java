@@ -12,7 +12,7 @@ import java.util.*;
 import java.sql.*;
 
 public class jTPCCTData {
-    private static org.apache.log4j.Logger log = Logger.getLogger("sql-exec-time.log");
+    private static org.apache.log4j.Logger log = Logger.getLogger("sql-exec-time");
     protected int numWarehouses = 0;
 
     public final static int
@@ -575,14 +575,14 @@ public class jTPCCTData {
     private ResultSet executeQuery(PreparedStatement stmt, String scene) throws SQLException {
         long start = System.currentTimeMillis();
         ResultSet rs = stmt.executeQuery();
-        log.info("scene:" + scene + "|sql:" + stmt + "|time:" + (System.currentTimeMillis() - start));
+        log.info("scene:" + scene + "|time:" + (System.currentTimeMillis() - start));
         return rs;
     }
 
     private int executeUpdate(PreparedStatement stmt, String scene) throws SQLException {
         long start = System.currentTimeMillis();
         int i = stmt.executeUpdate();
-        log.info("scene:" + scene + "|sql:" + stmt + "|time:" + (System.currentTimeMillis() - start));
+        log.info("scene:" + scene + "|time:" + (System.currentTimeMillis() - start));
         return i;
     }
 
@@ -1492,7 +1492,7 @@ public class jTPCCTData {
                     stmt2.setInt(1, deliveryBG.w_id);
                     stmt2.setInt(2, d_id);
                     stmt2.setInt(3, o_id);
-                    rc = executeUpdate(stmt2,"stmtDeliveryBGDeleteOldestNewOrder");
+                    rc = executeUpdate(stmt2, "stmtDeliveryBGDeleteOldestNewOrder");
                     if (rc == 0) {
                         /*
                          * Failed to delete the NEW_ORDER row. This is not
@@ -1526,7 +1526,7 @@ public class jTPCCTData {
                 stmt1.setInt(2, deliveryBG.w_id);
                 stmt1.setInt(3, d_id);
                 stmt1.setInt(4, o_id);
-                executeUpdate(stmt1,"stmtDeliveryBGUpdateOrder");
+                executeUpdate(stmt1, "stmtDeliveryBGUpdateOrder");
 
                 // Get the o_c_id from the ORDER.
                 stmt1 = db.stmtDeliveryBGSelectOrder;
@@ -1550,7 +1550,7 @@ public class jTPCCTData {
                 stmt1.setInt(2, deliveryBG.w_id);
                 stmt1.setInt(3, d_id);
                 stmt1.setInt(4, o_id);
-                executeUpdate(stmt1,"stmtDeliveryBGUpdateOrderLine");
+                executeUpdate(stmt1, "stmtDeliveryBGUpdateOrderLine");
 
                 // Select the sum(ol_amount) from ORDER_LINE.
                 stmt1 = db.stmtDeliveryBGSelectSumOLAmount;
@@ -1574,7 +1574,7 @@ public class jTPCCTData {
                 stmt1.setInt(2, deliveryBG.w_id);
                 stmt1.setInt(3, d_id);
                 stmt1.setInt(4, c_id);
-                executeUpdate(stmt1,"stmtDeliveryBGUpdateCustomer");
+                executeUpdate(stmt1, "stmtDeliveryBGUpdateCustomer");
 
                 // Recored the delivered O_ID in the DELIVERY_BG
                 deliveryBG.delivered_o_id[d_id - 1] = o_id;

@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration status="debug">
+    <properties>
+        <!-- 基本的文件的输出信息的配置 -->
+        <property name="LOG_HOME">logs</property>
+        <!-- 日志备份目录 -->
+        <property name="SERVER_NAME">web-font</property>
+    </properties>
+    <appenders>
+        <!-- 定义控制台输出 -->
+        <CONSOLE name="CONSOLE" target="SYSTEM_OUT" follow="true">
+            <PatternLayout pattern="[%d{yyyy-MM-dd HH:mm:ss,SSS}] %p [%t] %l - %m%n"/>
+        </CONSOLE>
+        <!-- 文件日志 -->
+        <RollingRandomAccessFile name="DAILY-ROLL-FILE" fileName="${LOG_HOME}/${SERVER_NAME}.log"
+                                 filePattern="${LOG_HOME}/${SERVER_NAME}.%d{yyyy-MM-dd-HH}.log">
+            <PatternLayout pattern="[%d{yyyy-MM-dd HH:mm:ss,SSS}] %p [%t] %l - %m%n"/>
+            <Policies>
+                <TimeBasedTriggeringPolicy interval="1" modulate="true"/>
+            </Policies>
+        </RollingRandomAccessFile>
+
+        <RollingFile name="sql-exec-time" fileName="logs/sql-exec-time.log"
+                     filePattern="logs/$${date:yyyy-MM}/ha-%d{MM-dd}-%i.log.gz">
+            <PatternLayout>
+                <Pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} %5p [%t] (%l) - %m%n</Pattern>
+            </PatternLayout>
+            <Policies>
+                <OnStartupTriggeringPolicy/>
+                <SizeBasedTriggeringPolicy size="250 MB"/>
+                <TimeBasedTriggeringPolicy/>
+            </Policies>
+            <DefaultRolloverStrategy max="10"/>
+        </RollingFile>
+    </appenders>
+    <loggers>
+        <AsyncLogger name="sql-exec-time" additivity="false" includeLocation="false">
+            <AppenderRef ref="sql-exec-time"/>
+            <AppenderRef ref="Console"/>
+            <AppenderRef ref="RollingFile"/>
+        </AsyncLogger>
+        <root level="debug">
+            <appender-ref ref="CONSOLE"/>
+            <appender-ref ref="DAILY-ROLL-FILE"/>
+        </root>
+    </loggers>
+</configuration>
