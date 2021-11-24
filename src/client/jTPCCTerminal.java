@@ -7,17 +7,15 @@
  *
  */
 
-import org.apache.log4j.*;
+
+import org.slf4j.LoggerFactory;
 
 import java.io.*;
 import java.sql.*;
-import java.sql.Date;
-import java.util.*;
-import javax.swing.*;
 
 
 public class jTPCCTerminal implements jTPCCConfig, Runnable {
-    private static org.apache.log4j.Logger log = Logger.getLogger(jTPCCTerminal.class);
+    public static final org.slf4j.Logger log = LoggerFactory.getLogger(jTPCCTerminal.class);
 
     private String terminalName;
     private Connection conn = null;
@@ -151,7 +149,7 @@ public class jTPCCTerminal implements jTPCCConfig, Runnable {
                     parent.resultAppend(term);
                     term.traceScreen(log);
                 } catch (Exception e) {
-                    log.fatal(e.getMessage());
+                    log.error(e.getMessage());
                     e.printStackTrace();
                     System.exit(4);
                 }
@@ -168,7 +166,7 @@ public class jTPCCTerminal implements jTPCCConfig, Runnable {
                     parent.resultAppend(term);
                     term.traceScreen(log);
                 } catch (Exception e) {
-                    log.fatal(e.getMessage());
+                    log.error(e.getMessage());
                     e.printStackTrace();
                     System.exit(4);
                 }
@@ -185,7 +183,7 @@ public class jTPCCTerminal implements jTPCCConfig, Runnable {
                     parent.resultAppend(term);
                     term.traceScreen(log);
                 } catch (Exception e) {
-                    log.fatal(e.getMessage());
+                    log.error(e.getMessage());
                     e.printStackTrace();
                     System.exit(4);
                 }
@@ -215,7 +213,7 @@ public class jTPCCTerminal implements jTPCCConfig, Runnable {
 
                     skippedDeliveries = bg.getSkippedDeliveries();
                 } catch (Exception e) {
-                    log.fatal(e.getMessage());
+                    log.error(e.getMessage());
                     e.printStackTrace();
                     System.exit(4);
                 }
@@ -232,7 +230,7 @@ public class jTPCCTerminal implements jTPCCConfig, Runnable {
                     parent.resultAppend(term);
                     term.traceScreen(log);
                 } catch (Exception e) {
-                    log.fatal(e.getMessage());
+                    log.error(e.getMessage());
                     e.printStackTrace();
                     System.exit(4);
                 }

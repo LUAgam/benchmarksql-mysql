@@ -7,7 +7,9 @@
  *
  */
 
-import org.apache.log4j.*;
+import org.apache.log4j.xml.DOMConfigurator;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.*;
 import java.nio.file.*;
@@ -18,7 +20,7 @@ import java.text.*;
 
 
 public class jTPCC implements jTPCCConfig {
-    private static org.apache.log4j.Logger log = Logger.getLogger(jTPCC.class);
+    public static final Logger log = LoggerFactory.getLogger(jTPCC.class);
     private static String resultDirName = null;
     private static BufferedWriter resultCSV = null;
     private static BufferedWriter runInfoCSV = null;
@@ -47,7 +49,7 @@ public class jTPCC implements jTPCCConfig {
     private OSCollector osCollector = null;
 
     public static void main(String args[]) {
-        PropertyConfigurator.configure("log4j.properties");
+        DOMConfigurator.configure("log4j2.xml");
         new jTPCC();
     }
 

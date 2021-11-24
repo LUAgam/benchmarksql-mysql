@@ -6,7 +6,8 @@
  *
  */
 
-import org.apache.log4j.*;
+
+import org.slf4j.Logger;
 
 import java.lang.*;
 import java.io.*;

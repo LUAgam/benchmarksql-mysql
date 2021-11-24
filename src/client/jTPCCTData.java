@@ -6,13 +6,15 @@
  *
  */
 
-import org.apache.log4j.*;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.*;
 import java.sql.*;
 
 public class jTPCCTData {
-    private static org.apache.log4j.Logger log = Logger.getLogger("sql-exec-time");
+    public static final Logger log = LoggerFactory.getLogger("sql-exec-time");
     protected int numWarehouses = 0;
 
     public final static int
