@@ -15,12 +15,16 @@ import java.io.*;
 import java.nio.file.*;
 import java.sql.*;
 import java.util.*;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 import java.util.regex.Pattern;
 import java.text.*;
 
 
 public class jTPCC implements jTPCCConfig {
     public static final Logger log = LoggerFactory.getLogger(jTPCC.class);
+    public static final Logger threadLog = LoggerFactory.getLogger("thread-nums");
     private static String resultDirName = null;
     private static BufferedWriter resultCSV = null;
     private static BufferedWriter runInfoCSV = null;
@@ -60,6 +64,12 @@ public class jTPCC implements jTPCCConfig {
     }
 
     public jTPCC() {
+
+        //thread nums
+
+        ScheduledExecutorService executorService = Executors.newSingleThreadScheduledExecutor();
+
+        executorService.scheduleAtFixedRate(printThreadNums(), 0L, 1, TimeUnit.SECONDS);
 
         // load the ini file
         Properties ini = new Properties();
@@ -499,6 +509,10 @@ public class jTPCC implements jTPCCConfig {
             }
         }
         updateStatusLine();
+    }
+
+    private Runnable printThreadNums() {
+        return () -> threadLog.info("thread nums:" + ThreadNum.getInstance().getThreadSet().size());
     }
 
     private void signalTerminalsRequestEnd(boolean timeTriggered) {

@@ -576,14 +576,18 @@ public class jTPCCTData {
 
     private ResultSet executeQuery(PreparedStatement stmt, String scene) throws SQLException {
         long start = System.currentTimeMillis();
+        ThreadNum.getInstance().addThreadSet(Thread.currentThread().getName());
         ResultSet rs = stmt.executeQuery();
+        ThreadNum.getInstance().removeThreadSet(Thread.currentThread().getName());
         log.info("scene:" + scene + "|time:" + (System.currentTimeMillis() - start));
         return rs;
     }
 
     private int executeUpdate(PreparedStatement stmt, String scene) throws SQLException {
         long start = System.currentTimeMillis();
+        ThreadNum.getInstance().addThreadSet(Thread.currentThread().getName());
         int i = stmt.executeUpdate();
+        ThreadNum.getInstance().removeThreadSet(Thread.currentThread().getName());
         log.info("scene:" + scene + "|time:" + (System.currentTimeMillis() - start));
         return i;
     }

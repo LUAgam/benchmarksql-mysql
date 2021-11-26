@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<configuration status="debug">
+<configuration status="info">
     <properties>
         <!-- 基本的文件的输出信息的配置 -->
         <property name="LOG_HOME">logs</property>
         <!-- 日志备份目录 -->
-        <property name="SERVER_NAME">web-font</property>
+        <property name="SERVER_NAME">benchmarksql-mysql</property>
     </properties>
     <appenders>
         <!-- 定义控制台输出 -->
@@ -20,26 +20,30 @@
             </Policies>
         </RollingRandomAccessFile>
 
-        <RollingFile name="sql-exec-time" fileName="logs/sql-exec-time.log"
-                     filePattern="logs/$${date:yyyy-MM}/ha-%d{MM-dd}-%i.log.gz">
-            <PatternLayout>
-                <Pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} %5p [%t] (%l) - %m%n</Pattern>
-            </PatternLayout>
+        <RollingRandomAccessFile name="sql-exec-time" fileName="logs/sql-exec-time-mysql.log"
+                                 filePattern="logs/$${date:yyyy-MM}/sql-exec-time-%d{MM-dd}-%i.log">
+            <PatternLayout pattern="[%d{yyyy-MM-dd HH:mm:ss,SSS}] %p [%t] %l - %m%n"/>
             <Policies>
-                <OnStartupTriggeringPolicy/>
-                <SizeBasedTriggeringPolicy size="250 MB"/>
-                <TimeBasedTriggeringPolicy/>
+                <TimeBasedTriggeringPolicy interval="1" modulate="true"/>
             </Policies>
-            <DefaultRolloverStrategy max="10"/>
-        </RollingFile>
+        </RollingRandomAccessFile>
+
+        <RollingRandomAccessFile name="thread-nums" fileName="logs/thread-nums-mysql.log"
+                                 filePattern="logs/$${date:yyyy-MM}/thread-nums-%d{MM-dd}-%i.log">
+            <PatternLayout pattern="[%d{yyyy-MM-dd HH:mm:ss,SSS}] %p [%t] %l - %m%n"/>
+            <Policies>
+                <TimeBasedTriggeringPolicy interval="1" modulate="true"/>
+            </Policies>
+        </RollingRandomAccessFile>
     </appenders>
     <loggers>
-        <AsyncLogger name="sql-exec-time" additivity="false" includeLocation="false">
+        <AsyncLogger name="sql-exec-time" additivity="false" includeLocation="false" level="warn">
             <AppenderRef ref="sql-exec-time"/>
-            <AppenderRef ref="Console"/>
-            <AppenderRef ref="RollingFile"/>
         </AsyncLogger>
-        <root level="debug">
+        <AsyncLogger name="thread-nums" additivity="false" includeLocation="false" level="warn">
+            <AppenderRef ref="thread-nums"/>
+        </AsyncLogger>
+        <root level="info">
             <appender-ref ref="CONSOLE"/>
             <appender-ref ref="DAILY-ROLL-FILE"/>
         </root>
