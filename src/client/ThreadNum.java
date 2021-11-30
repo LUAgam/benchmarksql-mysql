@@ -1,4 +1,4 @@
-import java.util.Collections;
+import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -6,7 +6,7 @@ public final class ThreadNum {
 
     public static final ThreadNum INSTANCE = new ThreadNum();
 
-    private Set<String> threadSet = Collections.newSetFromMap(new ConcurrentHashMap());
+    private Map<String, Integer> threadSet = new ConcurrentHashMap<String, Integer>();
 
 
     public static ThreadNum getInstance() {
@@ -14,15 +14,12 @@ public final class ThreadNum {
     }
 
     public Set<String> getThreadSet() {
-        return threadSet;
+        return threadSet.keySet();
     }
 
-    public void setThreadSet(Set<String> threadSet) {
-        this.threadSet = threadSet;
-    }
 
     public void addThreadSet(String threadName) {
-        this.threadSet.add(threadName);
+        this.threadSet.put(threadName, 1);
     }
 
     public void removeThreadSet(String threadName) {

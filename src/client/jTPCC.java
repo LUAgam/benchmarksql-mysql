@@ -69,7 +69,7 @@ public class jTPCC implements jTPCCConfig {
 
         ScheduledExecutorService executorService = Executors.newSingleThreadScheduledExecutor();
 
-        executorService.scheduleAtFixedRate(printThreadNums(), 0L, 1, TimeUnit.SECONDS);
+        executorService.scheduleAtFixedRate(printThreadNums(), 0L, 100, TimeUnit.MILLISECONDS);
 
         // load the ini file
         Properties ini = new Properties();
@@ -429,7 +429,6 @@ public class jTPCC implements jTPCCConfig {
                         Connection conn = null;
                         printMessage("Creating database connection for " + terminalName + "...");
                         conn = DriverManager.getConnection(database, dbProps);
-                        conn.setAutoCommit(false);
 
                         jTPCCTerminal terminal = new jTPCCTerminal
                                 (terminalName, terminalWarehouseID, terminalDistrictID,
