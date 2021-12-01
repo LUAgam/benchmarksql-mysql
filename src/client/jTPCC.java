@@ -429,6 +429,7 @@ public class jTPCC implements jTPCCConfig {
                         Connection conn = null;
                         printMessage("Creating database connection for " + terminalName + "...");
                         conn = DriverManager.getConnection(database, dbProps);
+                        conn.setAutoCommit(false);
 
                         jTPCCTerminal terminal = new jTPCCTerminal
                                 (terminalName, terminalWarehouseID, terminalDistrictID,
